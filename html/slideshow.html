@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>这是一个轮播图</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #nav li, #arrow span {
+            width: 20px;
+            height: 20px;
+            list-style: none;
+            background: #000000;
+            text-align: center;
+            line-height: 20px;
+            color: #ffffff;
+            float: left;
+            margin-right: 5px;
+            cursor: pointer;
+            opacity: .5;
+        }
+
+        #imgs img {
+            display: none;
+        }
+
+        #imgs .selected {
+            display: block;
+        }
+
+        #nav {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+        }
+
+        #arrow {
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+        }
+
+        #container {
+            height: 600px;
+            width: 600px;
+            position: relative;
+            margin: 25px auto;
+        }
+
+        #nav .nav-selected {
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+<div id="container">
+    <div id="imgs">
+        <img src="../img/mini.jpg" alt="" class="selected">
+        <img src="../img/Porsche.jpg" alt="">
+        <img src="../img/model%20T.jpg" alt="">
+        <img src="../img/beetle.jpg" alt="">
+    </div>
+    <ul id="nav">
+        <li class="nav-selected">1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+    </ul>
+    <div id="arrow">
+        <span id="backward">&lt;</span>
+        <span id="toward">&gt;</span>
+    </div>
+
+</div>
+<script>
+    var oImgs = document.getElementById('imgs');
+    var aImg = oImgs.getElementsByTagName('img');
+    var oNav = document.getElementById('nav');
+    var aLi = oNav.getElementsByTagName('li');
+    var oToward = document.getElementById('toward');
+    var oBackward = document.getElementById('backward');
+    var oContainer = document.getElementById('container');
+    var iNowIndex = 0;
+    var timer;
+
+    for (var i = 0; i < aLi.length; i++) {
+        aLi[i].index = i;
+        aLi[i].onmouseover = function () {
+            iNowIndex = this.index;
+            changeImg();
+        };
+    }
+
+    oToward.onclick = oBackward.onclick = function () {
+        if (this === oToward) {
+            iNowIndex++;
+            if (iNowIndex == aLi.length) {
+                iNowIndex = 0;
+            }
+        } else {
+            iNowIndex--;
+            if (iNowIndex == -1) {
+                iNowIndex = aLi.length - 1;
+            }
+        }
+        changeImg();
+    };
+
+    oContainer.onmouseover = function () {
+        clearInterval(timer);
+    };
+
+    oContainer.onmouseout = function () {
+        play();
+    };
+
+    play();
+
+    oToward.onselectstart = oBackward.onselectstart = function () {
+        return false;
+    };
+
+    function play() {
+        timer = setInterval(function () {
+            oToward.onclick();
+        }, 2000);
+    }
+
+    function changeImg() {
+        for (var j = 0; j < aLi.length; j++) {
+            aLi[j].className = '';
+            aImg[j].className = '';
+        }
+        aLi[iNowIndex].className = 'nav-selected';
+        aImg[iNowIndex].className = 'selected';
+    }
+</script>
+</body>
+</html>
